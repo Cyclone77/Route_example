@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>History API 使用</title>
+    <link href="lib/css/bootstrap.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+
+        <h1>History API 使用</h1>
+        <div class="list-group col-md-4">
+            <a href="javascript:void(0);" index="1" class="list-group-item active">Cras justo odio</a>
+            <a href="javascript:void(0);" index="2" class="list-group-item">Dapibus ac facilisis in</a>
+            <a href="javascript:void(0);" index="3" class="list-group-item">Morbi leo risus</a>
+            <a href="javascript:void(0);" index="4" class="list-group-item">Porta ac consectetur ac</a>
+            <a href="javascript:void(0);" index="5" class="list-group-item">Vestibulum at eros</a>
+        </div>
+        <div class="list-group col-md-8">
+            <h1 id="pageTitle"></h1>
+        </div>
+    </div>
+
+
+    <script src="lib/jquery.js"></script>
+    <script src="lib/js/bootstrap.js"></script>
+    <script>
+        $(function () {
+            var historyUse = false;
+            var historyUse = !!(window.history && window.history.pushState);
+            if (historyUse) {
+                $("a.list-group-item").on("click", function (event) {
+                    $("#pageTitle").text(this.innerText);
+                    $(this).addClass("active").siblings().removeClass("active");
+                    var index = this.getAttribute("index");
+                    //url处理
+                    var stateObj = {
+                        text: this.innerText,
+                        index: index
+                    };
+                    //是否是鼠标触发
+                    if (event.button > -1) history.pushState(stateObj, null, "?index=" + index);
+                    return false;
+                });
+            }
+
+            var params = new URLSearchParams(window.location.search);
+            var urlIndex = params.get("index");
+            if (!!urlIndex) {
+                $("a.list-group-item[index='" + urlIndex + "']").trigger("click");
+            } else {
+                $("a.list-group-item[index='1']").trigger("click");
+            }
+
+            window.onpopstate = function (event) {
+                var data = event.state;
+                if (!!data) {
+                    $("#pageTitle").text(data.text);
+                    $("a.list-group-item[index='" + data.index + "']").addClass("active").siblings().removeClass("active");
+                }
+            };
+        });
+    </script>
+</body>
+</html>

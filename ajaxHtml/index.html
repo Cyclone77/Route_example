@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+</head>
+<body>
+    <h1>页面标题</h1>
+    <div id="page1"></div>
+    <div id="footer"></div>
+    <script src="jquery.js"></script>
+    <script src="module.js"></script>
+    <script>
+        $(function () {
+            $.ajax({
+                url: "content.html",
+                context: document.body
+            }).done(function (el) {
+                $(this).addClass("done");
+            });
+
+            $.ajax({
+                url: "footer.html",
+                context: document.body
+            }).done(function (el) {
+                $(this).addClass("done");
+                $("#footer").html(el);
+            });
+        })
+    </script>
+</body>
+</html>
